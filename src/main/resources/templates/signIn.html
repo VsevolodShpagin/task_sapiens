@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="sign in page">
+    <meta name="author" content="VS">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Sign In</title>
+</head>
+
+<body class="screenCenter">
+<table th:if="${signInErrors != null}">
+    <tr th:each="error : ${signInErrors}">
+        <td class="errorText" th:text="${error.message}"></td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td>Please enter your name:</td>
+    </tr>
+    <form action="/signIn" th:object="${signInRequest}" method="post">
+        <tr>
+            <td class="spaceAfter"><input type="text" th:field="${signInRequest.name}"/></td>
+        </tr>
+        <tr class="rowCenter">
+            <td><input type="submit" value="Start"/></td>
+        </tr>
+    </form>
+</table>
+</body>
+
+</html>

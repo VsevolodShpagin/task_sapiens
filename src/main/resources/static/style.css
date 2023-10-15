@@ -1,0 +1,43 @@
+.screenCenter {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.rowCenter {
+    text-align: center;
+}
+
+.spaceAfter {
+    padding-bottom: 1em;
+}
+
+.errorText {
+    font-size: 18px;
+    color: red;
+}
+
+#exceptionText {
+    font-size: 32px;
+}
+
+.gameEndText {
+    font-size: 48px;
+}
+
+.guessInput {
+    width: 24px;
+}
+
+#leaderboardInput {
+    width: 36px;
+}
+
+.textColumn {
+    column-width: 128px;
+}
+
+.numberColumn {
+    column-width: 36px;
+}

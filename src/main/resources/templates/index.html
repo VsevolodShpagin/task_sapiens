@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="game start page">
+    <meta name="author" content="VS">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Guessing Game</title>
+</head>
+
+<body class="screenCenter">
+<table class="rowCenter">
+    <tr>
+        <td><h3>Game rules:</h3></td>
+    </tr>
+    <tr>
+        <td>Program chooses a random secret number with 4 digits.</td>
+    </tr>
+    <tr>
+        <td>All digits in the secret number are different.</td>
+    </tr>
+    <tr>
+        <td>Player has 8 tries to guess the secret number.</td>
+    </tr>
+    <tr>
+        <td>After each guess program displays the message "M:m; P:p" where:</td>
+    </tr>
+    <tr>
+        <td>m - number of matching digits but not on the right places</td>
+    </tr>
+    <tr>
+        <td>p - number of matching digits on exact places</td>
+    </tr>
+    <tr>
+        <td class="spaceAfter">Game ends after 8 tries or if the correct number is guessed.</td>
+    </tr>
+    <tr>
+        <form action="/signIn" method="get">
+            <td class="spaceAfter"><input type="submit" value="Start"/></td>
+        </form>
+    </tr>
+    <tr>
+        <form action="/leaderboard" method="get">
+            <td><input type="submit" value="Leaderboard"></td>
+        </form>
+    </tr>
+</table>
+</body>
+
+</html>

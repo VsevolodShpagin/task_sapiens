@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="game screen">
+    <meta name="author" content="VS">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Guessing Game</title>
+</head>
+
+<body class="screenCenter">
+<table th:if="${makeGuessErrors != null}">
+    <tr th:each="error : ${makeGuessErrors}">
+        <td class="errorText" th:text="${error.message}"></td>
+    </tr>
+</table>
+<table th:if="${getGuessHistoryErrors != null}">
+    <tr th:each="error : ${getGuessHistoryErrors}">
+        <td class="errorText" th:text="${error.message}"></td>
+    </tr>
+</table>
+<h3>
+    Hello, <text th:text="${player}"></text>
+</h3>
+<form action="/game" th:object="${makeGuessRequest}" method="post">
+    <table class="spaceAfter">
+        <tr>
+            <td><input class="guessInput" type="number" th:min="0" th:max="9"
+                       th:field="${makeGuessRequest.guess.firstDigit}"/></td>
+            <td><input class="guessInput" type="number" th:min="0" th:max="9"
+                       th:field="${makeGuessRequest.guess.secondDigit}"/></td>
+            <td><input class="guessInput" type="number" th:min="0" th:max="9"
+                       th:field="${makeGuessRequest.guess.thirdDigit}"/></td>
+            <td><input class="guessInput" type="number" th:min="0" th:max="9"
+                       th:field="${makeGuessRequest.guess.fourthDigit}"/></td>
+            <td><input type="submit" value="Guess"/></td>
+        </tr>
+    </table>
+</form>
+<table class="spaceAfter">
+    <tr th:if="${lastGuess != null}">
+        <td>Last guess:</td>
+        <td th:text="${lastGuess.guess}"></td>
+        <td>M:</td>
+        <td th:text="${lastGuess.matchCount}"></td>
+        <td>P:</td>
+        <td th:text="${lastGuess.placeMatchCount}"></td>
+    </tr>
+</table>
+<table class="spaceAfter">
+    <tr>
+        <td>Attempts left:</td>
+        <td>
+            <text th:text="${attemptsLeft}"></text>
+        </td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td class="textColumn">Guess</td>
+        <td class="numberColumn">M</td>
+        <td class="numberColumn">P</td>
+    </tr>
+    <tr th:if="${guesses != null}" th:each="guess : ${guesses}">
+        <td th:text="${guess.guess}"></td>
+        <td th:text="${guess.matchCount}"></td>
+        <td th:text="${guess.placeMatchCount}"></td>
+    </tr>
+</table>
+</body>
+
+</html>

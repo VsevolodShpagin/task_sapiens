@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="leaderboard page">
+    <meta name="author" content="VS">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Leaderboard</title>
+</head>
+
+<body class="screenCenter">
+<h2>Leaderboard</h2>
+<table th:if="${getLeaderboardErrors != null}">
+    <tr th:each="error : ${getLeaderboardErrors}">
+        <td class="errorText" th:text="${error.message}"></td>
+    </tr>
+</table>
+<table class="spaceAfter">
+    <tr>
+        <td class="textColumn">Name</td>
+        <td class="numberColumn">Games</td>
+        <td class="numberColumn">Win %</td>
+    </tr>
+    <tr th:if="${players != null}" th:each="player : ${players}">
+        <td th:text="${player.name}"></td>
+        <td th:text="${player.totalGames}"></td>
+        <td th:text="${player.winPercent}"></td>
+    </tr>
+</table>
+<form class="spaceAfter" action="/leaderboard" th:object="${getLeaderboardRequest}" method="post">
+    <tr>
+        <td>Minimal played game count:</td>
+        <td><input id="leaderboardInput" type="number" th:min="1" placeholder="0"
+                   th:field="${getLeaderboardRequest.minGameCount}"/></td>
+        <td><input type="submit" value="Filter"></td>
+    </tr>
+</form>
+<form class="rowCenter" action="/" method="get">
+    <input type="submit" value="Back"/>
+</form>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="game end page">
+    <meta name="author" content="VS">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Game End</title>
+</head>
+
+<body class="screenCenter">
+<h1>
+    Dear <text th:text="${player}"></text>,
+</h1>
+<table class="spaceAfter gameEndText">
+    <tr>
+        <td>
+            <text th:if="${result} == true">You win!</text>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <text th:if="${result} == false">You lose!</text>
+        </td>
+    </tr>
+</table>
+<table class="spaceAfter">
+    <tr>
+        <td>Secret number:</td>
+        <td>
+            <text th:text="${number}"></text>
+        </td>
+    </tr>
+</table>
+<form class="rowCenter spaceAfter" action="/game" method="get">
+    <td><input type="submit" value="New game"/></td>
+</form>
+<form class="rowCenter" action="/" method="get">
+    <td><input type="submit" value="Exit"/></td>
+</form>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+DROP TABLE IF EXISTS guess;
+DROP TABLE IF EXISTS game;
+DROP TABLE IF EXISTS player;
+
+CREATE TABLE IF NOT EXISTS player (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(32) NOT NULL,
+  total_games INT,
+  total_wins INT,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS game (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  player BIGINT NOT NULL,
+  result BOOLEAN,
+  PRIMARY KEY (id),
+  FOREIGN KEY (player) REFERENCES player(id)
+);
+
+CREATE TABLE IF NOT EXISTS guess (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  game BIGINT NOT NULL,
+  guess VARCHAR(4) NOT NULL,
+  match_count INT NOT NULL,
+  place_match_count INT NOT NULL,
+  creation_time DATETIME,
+  PRIMARY KEY (id),
+  FOREIGN KEY (game) REFERENCES game(id)
+);
