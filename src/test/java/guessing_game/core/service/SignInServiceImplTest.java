@@ -1,12 +1,12 @@
 package guessing_game.core.service;
 
-import guessing_game.core.Session;
 import guessing_game.core.database.service.PlayerService;
 import guessing_game.core.domain.Player;
 import guessing_game.core.request.SignInRequest;
 import guessing_game.core.response.SignInResponse;
 import guessing_game.core.response.shared.ResponseError;
 import guessing_game.core.service.validator.SignInValidator;
+import guessing_game.core.session.Session;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

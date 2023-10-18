@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class SignInRequest {
 
     private String name;
+    private String sessionId;
 
 }

@@ -4,4 +4,7 @@ import lombok.Data;
 
 @Data
 public class GetGuessHistoryRequest {
+
+    private final String sessionId;
+
 }

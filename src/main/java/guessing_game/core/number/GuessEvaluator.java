@@ -4,6 +4,6 @@ import guessing_game.core.domain.GuessResult;
 
 public interface GuessEvaluator {
 
-    GuessResult evaluate(String guess);
+    GuessResult evaluate(String guess, String number);
 
 }

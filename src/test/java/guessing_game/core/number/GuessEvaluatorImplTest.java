@@ -1,7 +1,7 @@
 package guessing_game.core.number;
 
-import guessing_game.core.Session;
 import guessing_game.core.domain.GuessResult;
+import guessing_game.core.session.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

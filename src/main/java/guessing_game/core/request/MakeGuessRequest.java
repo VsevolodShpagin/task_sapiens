@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 public class MakeGuessRequest {
 
     private NumberDto guess;
+    private String sessionId;
 
 }
