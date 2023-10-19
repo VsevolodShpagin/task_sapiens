@@ -12,4 +12,12 @@ public class SessionRepository {
 
     private Map<String, Session> sessions = new HashMap<>();
 
+    public Session getSession(String id) {
+        return sessions.get(id);
+    }
+
+    public void createSession(String id) {
+        sessions.put(id, new Session());
+    }
+
 }

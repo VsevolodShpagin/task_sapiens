@@ -42,8 +42,7 @@ public class GameController {
     public String showGamePage(HttpServletRequest httpRequest, ModelMap modelMap) {
         try {
             HttpSession httpSession = httpRequest.getSession();
-            String id = httpSession.getId();
-            Session session = sessions.getSessions().get(id) != null ? sessions.getSessions().get(id) : new Session();
+            Session session = sessions.getSession(httpSession.getId());
             modelMap.addAttribute("player", session.getPlayer().getName());
             modelMap.addAttribute("makeGuessRequest", new MakeGuessRequest());
             startGameService.execute(new StartGameRequest(httpSession.getId()));
@@ -62,16 +61,13 @@ public class GameController {
     ) {
         try {
             HttpSession httpSession = httpRequest.getSession();
-            String id = httpSession.getId();
-            Session session = sessions.getSessions().get(id) != null ? sessions.getSessions().get(id) : new Session();
+            Session session = sessions.getSession(httpSession.getId());
             modelMap.addAttribute("player", session.getPlayer().getName());
             request.setSessionId(httpSession.getId());
             makeGuess(request, modelMap);
             if (isEnd(session)) return "redirect:/gameEnd";
             modelMap.addAttribute("attemptsLeft", session.getAttemptsLeft());
             getGuessHistory(modelMap, httpSession.getId());
-            sessions.getSessions().put(id, session);
-//            httpSession.setAttribute("session", session);
             return "game";
         } catch (RuntimeException exception) {
             return "error";

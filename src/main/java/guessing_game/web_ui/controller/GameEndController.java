@@ -19,8 +19,7 @@ public class GameEndController {
     public String showGameEndPage(HttpServletRequest httpRequest, ModelMap modelMap) {
         try {
             HttpSession httpSession = httpRequest.getSession();
-            String id = httpSession.getId();
-            Session session = sessions.getSessions().get(id) != null ? sessions.getSessions().get(id) : new Session();
+            Session session = sessions.getSession(httpSession.getId());
             modelMap.addAttribute("player", session.getPlayer().getName());
             modelMap.addAttribute("result", session.getGame().getResult());
             modelMap.addAttribute("number", session.getNumber());

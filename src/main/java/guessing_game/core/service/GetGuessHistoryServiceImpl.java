@@ -19,18 +19,17 @@ import java.util.List;
 public class GetGuessHistoryServiceImpl implements GetGuessHistoryService {
 
     @Autowired
-    private SessionRepository sessions;
-    @Autowired
     private GetGuessHistoryValidator validator;
     @Autowired
     private GuessService guessService;
+    @Autowired
+    private SessionRepository sessions;
 
     @Override
     public GetGuessHistoryResponse execute(GetGuessHistoryRequest request) {
         List<ResponseError> errors = validator.validate(request);
         if (!errors.isEmpty()) return new GetGuessHistoryResponse(null, errors);
-        String id = request.getSessionId();
-        Session session = sessions.getSessions().get(id) != null ? sessions.getSessions().get(id) : new Session();
+        Session session = sessions.getSession(request.getSessionId());
         List<Guess> guesses = guessService.findByGame(session.getGame());
         return new GetGuessHistoryResponse(guesses, null);
     }

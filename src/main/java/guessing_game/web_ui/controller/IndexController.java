@@ -17,10 +17,8 @@ public class IndexController {
     @GetMapping(value = "/")
     public String index(HttpServletRequest httpRequest) {
         HttpSession httpSession = httpRequest.getSession();
-        String id = httpSession.getId();
-        Session session = sessions.getSessions().get(id) != null ? sessions.getSessions().get(id) : new Session();
-        sessions.getSessions().put(id, session);
-//        httpSession.setAttribute("session", session);
+        Session session = sessions.getSession(httpSession.getId());
+        if (session == null) sessions.createSession(httpSession.getId());
         return "index";
     }
 

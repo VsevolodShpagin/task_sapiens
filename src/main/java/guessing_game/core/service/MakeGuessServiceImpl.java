@@ -43,8 +43,7 @@ public class MakeGuessServiceImpl implements MakeGuessService {
     public MakeGuessResponse execute(MakeGuessRequest request) {
         List<ResponseError> errors = validator.validate(request);
         if (!errors.isEmpty()) return new MakeGuessResponse(errors);
-        String id = request.getSessionId();
-        Session session = sessions.getSessions().get(id) != null ? sessions.getSessions().get(id) : new Session();
+        Session session = sessions.getSession(request.getSessionId());
         GuessResult guessResult = guessEvaluator.evaluate(numberConverter.toString(request.getGuess()), session.getNumber());
         session.setAttemptsLeft(session.getAttemptsLeft() - 1);
         Guess guess = new Guess(

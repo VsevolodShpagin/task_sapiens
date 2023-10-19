@@ -29,8 +29,7 @@ public class SignInServiceImpl implements SignInService {
     public SignInResponse execute(SignInRequest request) {
         List<ResponseError> errors = validator.validate(request);
         if (!errors.isEmpty()) return new SignInResponse(errors);
-        String id = request.getSessionId();
-        Session session = sessions.getSessions().get(id) != null ? sessions.getSessions().get(id) : new Session();
+        Session session = sessions.getSession(request.getSessionId());
         Player player = playerService.findFirstByName(request.getName())
                 .orElseGet(() -> createNewPlayer(request.getName()));
         session.setPlayer(player);

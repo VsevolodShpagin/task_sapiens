@@ -37,8 +37,7 @@ public class StartGameServiceImpl implements StartGameService {
     public StartGameResponse execute(StartGameRequest request) {
         List<ResponseError> errors = validator.validate(request);
         if (!errors.isEmpty()) return new StartGameResponse(errors);
-        String id = request.getSessionId();
-        Session session = sessions.getSessions().get(id) != null ? sessions.getSessions().get(id) : new Session();
+        Session session = sessions.getSession(request.getSessionId());
         Game game = gameService.save(new Game(session.getPlayer(), false));
         playerService.increaseTotalGames(session.getPlayer());
         String number = numberGenerator.createNumber();
