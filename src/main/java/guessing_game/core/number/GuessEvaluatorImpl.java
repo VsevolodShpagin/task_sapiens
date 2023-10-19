@@ -1,8 +1,6 @@
 package guessing_game.core.number;
 
-import guessing_game.core.Session;
 import guessing_game.core.domain.GuessResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,21 +13,17 @@ public class GuessEvaluatorImpl implements GuessEvaluator {
     private static final char MATCH = 'm';
     private static final char PLACE_MATCH = 'p';
 
-    @Autowired
-    private Session session;
-
     @Override
-    public GuessResult evaluate(String guess) {
+    public GuessResult evaluate(String guess, String number) {
         List<Character> guessAsList = guess.chars().mapToObj(c -> (char) c).toList();
         List<Character> result =
-                IntStream.range(0, guessAsList.size()).mapToObj(i -> checkDigit(guessAsList.get(i), i)).toList();
+                IntStream.range(0, guessAsList.size()).mapToObj(i -> checkDigit(guessAsList.get(i), i, number)).toList();
         int matchCount = Math.toIntExact(result.stream().filter(c -> c.equals('m')).count());
         int placeMatchCount = Math.toIntExact(result.stream().filter(c -> c.equals('p')).count());
         return new GuessResult(matchCount, placeMatchCount);
     }
 
-    private char checkDigit(int digit, int index) {
-        String number = session.getNumber();
+    private char checkDigit(int digit, int index, String number) {
         char c = (char) digit;
         char result = NO_MATCH;
         if (number.indexOf(c) > -1 && number.indexOf(c) == index) {

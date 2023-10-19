@@ -34,14 +34,38 @@ class MakeGuessValidatorImplTest {
     @Test
     void validate_validInput_noError() {
         when(mockNumberConverter.toString(mockNumberDto)).thenReturn("1234");
-        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto);
+        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto, "sessionId");
         List<ResponseError> result = validator.validate(request);
         assertTrue(result.isEmpty());
     }
 
     @Test
+    void validate_nullId_returnError() {
+        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto, "");
+        List<ResponseError> result = validator.validate(request);
+        assertEquals(1, result.size());
+        verify(mockErrorProcessor).getErrorMessage("ID_BLANK");
+    }
+
+    @Test
+    void validate_blankId_returnError() {
+        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto, "   ");
+        List<ResponseError> result = validator.validate(request);
+        assertEquals(1, result.size());
+        verify(mockErrorProcessor).getErrorMessage("ID_BLANK");
+    }
+
+    @Test
+    void validate_emptyId_returnError() {
+        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto, null);
+        List<ResponseError> result = validator.validate(request);
+        assertEquals(1, result.size());
+        verify(mockErrorProcessor).getErrorMessage("ID_BLANK");
+    }
+
+    @Test
     void validate_nullGuess_returnError() {
-        MakeGuessRequest request = new MakeGuessRequest(null);
+        MakeGuessRequest request = new MakeGuessRequest(null, "sessionId");
         List<ResponseError> result = validator.validate(request);
         assertEquals(1, result.size());
         verify(mockErrorProcessor).getErrorMessage("GUESS_BLANK");
@@ -50,7 +74,7 @@ class MakeGuessValidatorImplTest {
     @Test
     void validate_blankGuess_returnError() {
         when(mockNumberConverter.toString(mockNumberDto)).thenReturn("");
-        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto);
+        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto, "sessionId");
         List<ResponseError> result = validator.validate(request);
         assertEquals(1, result.size());
         verify(mockErrorProcessor).getErrorMessage("GUESS_NOT_NUMBER");
@@ -59,7 +83,7 @@ class MakeGuessValidatorImplTest {
     @Test
     void validate_emptyGuess_returnError() {
         when(mockNumberConverter.toString(mockNumberDto)).thenReturn("    ");
-        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto);
+        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto, "sessionId");
         List<ResponseError> result = validator.validate(request);
         assertEquals(1, result.size());
         verify(mockErrorProcessor).getErrorMessage("GUESS_NOT_NUMBER");
@@ -68,7 +92,7 @@ class MakeGuessValidatorImplTest {
     @Test
     void validate_letterGuess_returnError() {
         when(mockNumberConverter.toString(mockNumberDto)).thenReturn("123A");
-        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto);
+        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto, "sessionId");
         List<ResponseError> result = validator.validate(request);
         assertEquals(1, result.size());
         verify(mockErrorProcessor).getErrorMessage("GUESS_NOT_NUMBER");
@@ -77,7 +101,7 @@ class MakeGuessValidatorImplTest {
     @Test
     void validate_shortGuess_returnError() {
         when(mockNumberConverter.toString(mockNumberDto)).thenReturn("123");
-        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto);
+        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto, "sessionId");
         List<ResponseError> result = validator.validate(request);
         assertEquals(1, result.size());
         verify(mockErrorProcessor).getErrorMessage("GUESS_WRONG_LENGTH");
@@ -86,7 +110,7 @@ class MakeGuessValidatorImplTest {
     @Test
     void validate_longGuess_returnError() {
         when(mockNumberConverter.toString(mockNumberDto)).thenReturn("123456789");
-        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto);
+        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto, "sessionId");
         List<ResponseError> result = validator.validate(request);
         assertEquals(1, result.size());
         verify(mockErrorProcessor).getErrorMessage("GUESS_WRONG_LENGTH");
@@ -95,7 +119,7 @@ class MakeGuessValidatorImplTest {
     @Test
     void validate_startingZeroGuess_returnError() {
         when(mockNumberConverter.toString(mockNumberDto)).thenReturn("0234");
-        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto);
+        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto, "sessionId");
         List<ResponseError> result = validator.validate(request);
         assertEquals(1, result.size());
         verify(mockErrorProcessor).getErrorMessage("GUESS_START_0");
@@ -104,7 +128,7 @@ class MakeGuessValidatorImplTest {
     @Test
     void validate_repeatingNumberGuess_returnError() {
         when(mockNumberConverter.toString(mockNumberDto)).thenReturn("1134");
-        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto);
+        MakeGuessRequest request = new MakeGuessRequest(mockNumberDto, "sessionId");
         List<ResponseError> result = validator.validate(request);
         assertEquals(1, result.size());
         verify(mockErrorProcessor).getErrorMessage("GUESS_REPEATING");

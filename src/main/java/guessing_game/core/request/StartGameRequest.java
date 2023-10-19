@@ -4,4 +4,7 @@ import lombok.Data;
 
 @Data
 public class StartGameRequest {
+
+    private final String sessionId;
+
 }

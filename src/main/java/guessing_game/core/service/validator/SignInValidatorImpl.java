@@ -13,6 +13,7 @@ import java.util.Optional;
 @Component
 public class SignInValidatorImpl implements SignInValidator {
 
+    private static final String ID_BLANK = "ID_BLANK";
     private static final String NAME_BLANK = "NAME_BLANK";
 
     @Autowired
@@ -21,8 +22,15 @@ public class SignInValidatorImpl implements SignInValidator {
     @Override
     public List<ResponseError> validate(SignInRequest request) {
         List<ResponseError> errors = new ArrayList<>();
-        validateNameIsPresent(request).ifPresent(errors::add);
+        validateIdIsPresent(request).ifPresent(errors::add);
+        if (errors.size() == 0) validateNameIsPresent(request).ifPresent(errors::add);
         return errors;
+    }
+
+    private Optional<ResponseError> validateIdIsPresent(SignInRequest request) {
+        return (request.getSessionId() == null || request.getSessionId().isBlank())
+                ? Optional.of(new ResponseError(errorProcessor.getErrorMessage(ID_BLANK)))
+                : Optional.empty();
     }
 
     private Optional<ResponseError> validateNameIsPresent(SignInRequest request) {

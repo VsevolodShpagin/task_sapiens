@@ -26,14 +26,38 @@ class SignInValidatorImplTest {
 
     @Test
     void validate_validInput_noError() {
-        SignInRequest request = new SignInRequest("name");
+        SignInRequest request = new SignInRequest("name", "sessionId");
         List<ResponseError> result = validator.validate(request);
         assertTrue(result.isEmpty());
     }
 
     @Test
+    void validate_nullId_returnError() {
+        SignInRequest request = new SignInRequest("name", null);
+        List<ResponseError> result = validator.validate(request);
+        assertEquals(1, result.size());
+        verify(mockErrorProcessor).getErrorMessage("ID_BLANK");
+    }
+
+    @Test
+    void validate_blankId_returnError() {
+        SignInRequest request = new SignInRequest("name", "");
+        List<ResponseError> result = validator.validate(request);
+        assertEquals(1, result.size());
+        verify(mockErrorProcessor).getErrorMessage("ID_BLANK");
+    }
+
+    @Test
+    void validate_emptyId_returnError() {
+        SignInRequest request = new SignInRequest("name", "   ");
+        List<ResponseError> result = validator.validate(request);
+        assertEquals(1, result.size());
+        verify(mockErrorProcessor).getErrorMessage("ID_BLANK");
+    }
+
+    @Test
     void validate_nullInput_returnError() {
-        SignInRequest request = new SignInRequest(null);
+        SignInRequest request = new SignInRequest(null, "sessionId");
         List<ResponseError> result = validator.validate(request);
         assertEquals(1, result.size());
         verify(mockErrorProcessor).getErrorMessage("NAME_BLANK");
@@ -41,7 +65,7 @@ class SignInValidatorImplTest {
 
     @Test
     void validate_blankInput_returnError() {
-        SignInRequest request = new SignInRequest("");
+        SignInRequest request = new SignInRequest("", "sessionId");
         List<ResponseError> result = validator.validate(request);
         assertEquals(1, result.size());
         verify(mockErrorProcessor).getErrorMessage("NAME_BLANK");
@@ -49,7 +73,7 @@ class SignInValidatorImplTest {
 
     @Test
     void validate_emptyInput_returnError() {
-        SignInRequest request = new SignInRequest("     ");
+        SignInRequest request = new SignInRequest("     ", "sessionId");
         List<ResponseError> result = validator.validate(request);
         assertEquals(1, result.size());
         verify(mockErrorProcessor).getErrorMessage("NAME_BLANK");
