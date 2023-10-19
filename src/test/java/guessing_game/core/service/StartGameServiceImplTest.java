@@ -10,6 +10,7 @@ import guessing_game.core.response.StartGameResponse;
 import guessing_game.core.response.shared.ResponseError;
 import guessing_game.core.service.validator.StartGameValidator;
 import guessing_game.core.session.Session;
+import guessing_game.core.session.SessionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,8 +28,6 @@ import static org.mockito.Mockito.when;
 class StartGameServiceImplTest {
 
     @Mock
-    private Session mockSession;
-    @Mock
     private StartGameValidator mockValidator;
     @Mock
     private PlayerService mockPlayerService;
@@ -37,9 +36,13 @@ class StartGameServiceImplTest {
     @Mock
     private GameService mockGameService;
     @Mock
+    private SessionRepository mockSessionRepository;
+    @Mock
     private StartGameRequest mockRequest;
     @Mock
     private ResponseError mockError;
+    @Mock
+    private Session mockSession;
     @Mock
     private Player mockPlayer;
     @Mock
@@ -57,12 +60,14 @@ class StartGameServiceImplTest {
 
     @Test
     void execute_validRequest_saveGame() {
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
         service.execute(mockRequest);
         verify(mockGameService).save(any());
     }
 
     @Test
     void execute_validRequest_increaseTotalGames() {
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
         when(mockSession.getPlayer()).thenReturn(mockPlayer);
         service.execute(mockRequest);
         verify(mockPlayerService).increaseTotalGames(mockPlayer);
@@ -70,12 +75,14 @@ class StartGameServiceImplTest {
 
     @Test
     void execute_validRequest_createNumber() {
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
         service.execute(mockRequest);
         verify(mockNumberGenerator).createNumber();
     }
 
     @Test
     void execute_validRequest_setGame() {
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
         when(mockGameService.save(any())).thenReturn(mockGame);
         service.execute(mockRequest);
         verify(mockSession).setGame(mockGame);
@@ -83,6 +90,7 @@ class StartGameServiceImplTest {
 
     @Test
     void execute_validRequest_setNumber() {
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
         when(mockNumberGenerator.createNumber()).thenReturn("1234");
         service.execute(mockRequest);
         verify(mockSession).setNumber("1234");
@@ -90,6 +98,7 @@ class StartGameServiceImplTest {
 
     @Test
     void execute_validRequest_setAttemptsLeft() {
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
         service.execute(mockRequest);
         verify(mockSession).setAttemptsLeft(8);
     }

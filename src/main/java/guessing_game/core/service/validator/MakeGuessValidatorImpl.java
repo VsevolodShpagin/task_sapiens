@@ -19,6 +19,7 @@ public class MakeGuessValidatorImpl implements MakeGuessValidator {
     private static final String REGEX_NUMBER = "[0-9]+";
     private static final String REGEX_REPEATING = "^.*(.).*\\1.*$";
 
+    private static final String ID_BLANK = "ID_BLANK";
     private static final String GUESS_BLANK = "GUESS_BLANK";
     private static final String GUESS_NOT_NUMBER = "GUESS_NOT_NUMBER";
     private static final String GUESS_WRONG_LENGTH = "GUESS_WRONG_LENGTH";
@@ -33,13 +34,22 @@ public class MakeGuessValidatorImpl implements MakeGuessValidator {
     @Override
     public List<ResponseError> validate(MakeGuessRequest request) {
         List<ResponseError> errors = new ArrayList<>();
-        validateGuessIsPresent(request).ifPresent(errors::add);
-        String number = numberConverter.toString(request.getGuess());
-        if (errors.size() == 0) validateIsNumber(number).ifPresent(errors::add);
-        if (errors.size() == 0) validateLength(number).ifPresent(errors::add);
-        if (errors.size() == 0) validateStartWithNonZero(number).ifPresent(errors::add);
-        if (errors.size() == 0) validateNoDuplicates(number).ifPresent(errors::add);
+        validateIdIsPresent(request).ifPresent(errors::add);
+        if (errors.size() == 0) {
+            validateGuessIsPresent(request).ifPresent(errors::add);
+            String number = numberConverter.toString(request.getGuess());
+            if (errors.size() == 0) validateIsNumber(number).ifPresent(errors::add);
+            if (errors.size() == 0) validateLength(number).ifPresent(errors::add);
+            if (errors.size() == 0) validateStartWithNonZero(number).ifPresent(errors::add);
+            if (errors.size() == 0) validateNoDuplicates(number).ifPresent(errors::add);
+        }
         return errors;
+    }
+
+    private Optional<ResponseError> validateIdIsPresent(MakeGuessRequest request) {
+        return (request.getSessionId() == null || request.getSessionId().isBlank())
+                ? Optional.of(new ResponseError(errorProcessor.getErrorMessage(ID_BLANK)))
+                : Optional.empty();
     }
 
     private Optional<ResponseError> validateGuessIsPresent(MakeGuessRequest request) {

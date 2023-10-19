@@ -13,6 +13,7 @@ import guessing_game.core.response.MakeGuessResponse;
 import guessing_game.core.response.shared.ResponseError;
 import guessing_game.core.service.validator.MakeGuessValidator;
 import guessing_game.core.session.Session;
+import guessing_game.core.session.SessionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,8 +30,6 @@ import static org.mockito.Mockito.*;
 class MakeGuessServiceImplTest {
 
     @Mock
-    private Session mockSession;
-    @Mock
     private MakeGuessValidator mockValidator;
     @Mock
     private GuessEvaluator mockGuessEvaluator;
@@ -43,11 +42,15 @@ class MakeGuessServiceImplTest {
     @Mock
     private PlayerService mockPlayerService;
     @Mock
+    private SessionRepository mockSessionRepository;
+    @Mock
     private MakeGuessRequest mockRequest;
     @Mock
     private ResponseError mockError;
     @Mock
     private GuessResult mockGuessResult;
+    @Mock
+    private Session mockSession;
     @Mock
     private Game mockGame;
     @Mock
@@ -65,7 +68,8 @@ class MakeGuessServiceImplTest {
 
     @Test
     void execute_validGuess_reduceAttemptsLeft() {
-        when(mockGuessEvaluator.evaluate(any())).thenReturn(mockGuessResult);
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
+        when(mockGuessEvaluator.evaluate(any(), any())).thenReturn(mockGuessResult);
         when(mockSession.getAttemptsLeft()).thenReturn(8, 7);
         when(mockSession.getNumber()).thenReturn("1234");
         when(mockGuessResult.getMatch()).thenReturn(1);
@@ -76,7 +80,8 @@ class MakeGuessServiceImplTest {
 
     @Test
     void execute_validGuess_saveGuess() {
-        when(mockGuessEvaluator.evaluate(any())).thenReturn(mockGuessResult);
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
+        when(mockGuessEvaluator.evaluate(any(), any())).thenReturn(mockGuessResult);
         when(mockSession.getNumber()).thenReturn("1234");
         when(mockGuessResult.getMatch()).thenReturn(1);
         when(mockGuessResult.getPlaceMatch()).thenReturn(1);
@@ -86,7 +91,8 @@ class MakeGuessServiceImplTest {
 
     @Test
     void execute_winningGuess_updateToWin() {
-        when(mockGuessEvaluator.evaluate(any())).thenReturn(mockGuessResult);
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
+        when(mockGuessEvaluator.evaluate(any(), any())).thenReturn(mockGuessResult);
         when(mockSession.getNumber()).thenReturn("1234");
         when(mockGuessResult.getMatch()).thenReturn(0);
         when(mockGuessResult.getPlaceMatch()).thenReturn(4);
@@ -100,7 +106,8 @@ class MakeGuessServiceImplTest {
 
     @Test
     void execute_lastGuess_doNotUpdateToWin() {
-        when(mockGuessEvaluator.evaluate(any())).thenReturn(mockGuessResult);
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
+        when(mockGuessEvaluator.evaluate(any(), any())).thenReturn(mockGuessResult);
         when(mockSession.getAttemptsLeft()).thenReturn(1, 0);
         when(mockSession.getNumber()).thenReturn("1234");
         when(mockGuessResult.getMatch()).thenReturn(1);
@@ -113,7 +120,8 @@ class MakeGuessServiceImplTest {
 
     @Test
     void execute_lastWinningGuess_updateToWin() {
-        when(mockGuessEvaluator.evaluate(any())).thenReturn(mockGuessResult);
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
+        when(mockGuessEvaluator.evaluate(any(), any())).thenReturn(mockGuessResult);
         when(mockSession.getAttemptsLeft()).thenReturn(1, 0);
         when(mockSession.getNumber()).thenReturn("1234");
         when(mockGuessResult.getMatch()).thenReturn(0);

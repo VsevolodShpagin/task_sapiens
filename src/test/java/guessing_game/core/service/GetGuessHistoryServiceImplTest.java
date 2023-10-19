@@ -7,6 +7,7 @@ import guessing_game.core.response.GetGuessHistoryResponse;
 import guessing_game.core.response.shared.ResponseError;
 import guessing_game.core.service.validator.GetGuessHistoryValidator;
 import guessing_game.core.session.Session;
+import guessing_game.core.session.SessionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,17 +24,19 @@ import static org.mockito.Mockito.when;
 class GetGuessHistoryServiceImplTest {
 
     @Mock
-    private Session mockSession;
-    @Mock
     private GetGuessHistoryValidator mockValidator;
     @Mock
     private GuessService mockGuessService;
+    @Mock
+    private SessionRepository mockSessionRepository;
     @Mock
     private GetGuessHistoryRequest mockRequest;
     @Mock
     private ResponseError mockError;
     @Mock
     private Guess mockGuess;
+    @Mock
+    private Session mockSession;
 
     @InjectMocks
     private GetGuessHistoryServiceImpl service;
@@ -47,6 +50,7 @@ class GetGuessHistoryServiceImplTest {
 
     @Test
     void execute_validInput_returnGuesses() {
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
         when(mockGuessService.findByGame(any())).thenReturn(List.of(mockGuess, mockGuess));
         GetGuessHistoryResponse response = service.execute(mockRequest);
         assertEquals(2, response.getGuesses().size());

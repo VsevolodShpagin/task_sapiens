@@ -7,6 +7,7 @@ import guessing_game.core.response.SignInResponse;
 import guessing_game.core.response.shared.ResponseError;
 import guessing_game.core.service.validator.SignInValidator;
 import guessing_game.core.session.Session;
+import guessing_game.core.session.SessionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,17 +25,19 @@ import static org.mockito.Mockito.*;
 class SignInServiceImplTest {
 
     @Mock
-    private Session mockSession;
-    @Mock
     private SignInValidator mockValidator;
     @Mock
     private PlayerService mockPlayerService;
+    @Mock
+    private SessionRepository mockSessionRepository;
     @Mock
     private SignInRequest mockRequest;
     @Mock
     private ResponseError mockError;
     @Mock
     private Player mockPlayer;
+    @Mock
+    private Session mockSession;
 
     @InjectMocks
     private SignInServiceImpl service;
@@ -48,6 +51,7 @@ class SignInServiceImplTest {
 
     @Test
     void execute_validRequest_returnName() {
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
         when(mockRequest.getName()).thenReturn("name");
         when(mockPlayerService.findFirstByName("name")).thenReturn(Optional.of(mockPlayer));
         SignInResponse response = service.execute(mockRequest);
@@ -56,6 +60,7 @@ class SignInServiceImplTest {
 
     @Test
     void execute_validRequest_setCurrentPlayer() {
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
         when(mockPlayerService.findFirstByName(any())).thenReturn(Optional.of(mockPlayer));
         service.execute(mockRequest);
         verify(mockSession).setPlayer(mockPlayer);
@@ -63,6 +68,7 @@ class SignInServiceImplTest {
 
     @Test
     void execute_newPlayer_setNewPlayer() {
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
         when(mockPlayerService.findFirstByName(any())).thenReturn(Optional.empty());
         when(mockPlayerService.save(any())).thenReturn(mockPlayer);
         service.execute(mockRequest);
@@ -72,6 +78,7 @@ class SignInServiceImplTest {
 
     @Test
     void execute_existingPlayer_setExistingPlayer() {
+        when(mockSessionRepository.getSession(any())).thenReturn(mockSession);
         when(mockPlayerService.findFirstByName(any())).thenReturn(Optional.of(mockPlayer));
         service.execute(mockRequest);
         verify(mockPlayerService, times(0)).save(any());

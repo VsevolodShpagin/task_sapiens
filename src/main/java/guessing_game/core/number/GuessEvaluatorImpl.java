@@ -1,8 +1,6 @@
 package guessing_game.core.number;
 
 import guessing_game.core.domain.GuessResult;
-import guessing_game.core.session.SessionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,9 +12,6 @@ public class GuessEvaluatorImpl implements GuessEvaluator {
     private static final char NO_MATCH = 'x';
     private static final char MATCH = 'm';
     private static final char PLACE_MATCH = 'p';
-
-    @Autowired
-    private SessionRepository sessions;
 
     @Override
     public GuessResult evaluate(String guess, String number) {
