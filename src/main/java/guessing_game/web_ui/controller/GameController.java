@@ -13,7 +13,6 @@ import guessing_game.core.service.MakeGuessService;
 import guessing_game.core.service.StartGameService;
 import guessing_game.core.session.Session;
 import guessing_game.core.session.SessionRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,9 +38,8 @@ public class GameController {
     private SessionRepository sessions;
 
     @GetMapping(value = "/game")
-    public String showGamePage(HttpServletRequest httpRequest, ModelMap modelMap) {
+    public String showGamePage(HttpSession httpSession, ModelMap modelMap) {
         try {
-            HttpSession httpSession = httpRequest.getSession();
             Session session = sessions.getSession(httpSession.getId());
             modelMap.addAttribute("player", session.getPlayer().getName());
             modelMap.addAttribute("makeGuessRequest", new MakeGuessRequest());
@@ -56,11 +54,10 @@ public class GameController {
     @PostMapping(value = "/game")
     public String processMakeGuessRequest(
             @ModelAttribute(value = "makeGuessRequest") MakeGuessRequest request,
-            HttpServletRequest httpRequest,
+            HttpSession httpSession,
             ModelMap modelMap
     ) {
         try {
-            HttpSession httpSession = httpRequest.getSession();
             Session session = sessions.getSession(httpSession.getId());
             modelMap.addAttribute("player", session.getPlayer().getName());
             request.setSessionId(httpSession.getId());

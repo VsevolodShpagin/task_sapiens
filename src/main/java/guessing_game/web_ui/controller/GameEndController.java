@@ -2,7 +2,6 @@ package guessing_game.web_ui.controller;
 
 import guessing_game.core.session.Session;
 import guessing_game.core.session.SessionRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,9 +15,8 @@ public class GameEndController {
     private SessionRepository sessions;
 
     @GetMapping(value = "/gameEnd")
-    public String showGameEndPage(HttpServletRequest httpRequest, ModelMap modelMap) {
+    public String showGameEndPage(HttpSession httpSession, ModelMap modelMap) {
         try {
-            HttpSession httpSession = httpRequest.getSession();
             Session session = sessions.getSession(httpSession.getId());
             modelMap.addAttribute("player", session.getPlayer().getName());
             modelMap.addAttribute("result", session.getGame().getResult());

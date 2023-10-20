@@ -3,7 +3,6 @@ package guessing_game.web_ui.controller;
 import guessing_game.core.request.SignInRequest;
 import guessing_game.core.response.SignInResponse;
 import guessing_game.core.service.SignInService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,11 +26,10 @@ public class SignInController {
     @PostMapping(value = "/signIn")
     public String processSignInRequest(
             @ModelAttribute(value = "signInRequest") SignInRequest request,
-            HttpServletRequest httpRequest,
+            HttpSession httpSession,
             ModelMap modelMap
     ) {
         try {
-            HttpSession httpSession = httpRequest.getSession();
             request.setSessionId(httpSession.getId());
             SignInResponse response = signInService.execute(request);
             if (response.getErrors() != null && !response.getErrors().isEmpty()) {
